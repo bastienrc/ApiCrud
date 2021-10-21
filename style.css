@@ -1,0 +1,29 @@
+*, ::before, ::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #009900;
+  background: linear-gradient(180deg,#009900 0%, #333333 80%);
+  height: 100vh;
+}
+
+h1 {
+  text-align: center;
+  margin: 1.5rem 0 3rem 0;
+  color: #FFF;
+}
+
+#illustration {
+  width: 50vw;
+  height: 75vh;
+  margin: 10px auto;
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.50);
+}
+
+#illustration img {
+  width: 100%;
+  height: 100%;
+}
