@@ -76,3 +76,10 @@ img {
 .userProfile .id::before {
   content: '#';
 }
+
+.userProfile .menu {
+  position: absolute;
+  bottom: 0px;
+  right: 10px;
+  padding: 5px;
+}
