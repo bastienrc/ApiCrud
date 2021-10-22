@@ -39,6 +39,7 @@ img {
 }
 
 .userProfile {
+  position: relative;
   display: flex;
   align-items: center;
   margin: 10px;
@@ -47,6 +48,7 @@ img {
   width: 400px;
   height: 120px;
   border-radius: 60px 15px 15px 60px;
+  box-shadow: 10px 10px 10px 0 #333333cc;
 }
 
 .userProfile .avatar {
@@ -62,4 +64,15 @@ img {
 
 .userProfile .info {
   padding: 20px;
+}
+
+.userProfile .id {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+}
+
+.userProfile .id::before {
+  content: '#';
 }

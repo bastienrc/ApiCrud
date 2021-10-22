@@ -10,33 +10,32 @@ const img = document.querySelector('#illustrator img')
 //     }
 //   })
 
-function viewProfilUser({email, first_name, last_name, avatar}) {
-  return `
-    <div class="userProfile">
-      <div class="avatar">
-        <img src="${avatar}" alt="avatar de l'utilisateur ${first_name} ${last_name}" />
+function listProfilsUsersInUsersContainer(data) {
+  const usersContainer = document.querySelector('#usersContainer')
+
+  usersContainer.innerHTML = ''
+  data.data.forEach(({email, first_name, last_name, avatar, id}) => {
+    usersContainer.innerHTML += `
+      <div class="userProfile">
+        <div class="avatar">
+          <img src="${avatar}" alt="avatar de l'utilisateur ${first_name} ${last_name}" />
+        </div>
+        <div class="info">
+          <p>${first_name} ${last_name}</p>
+          <p>${email}</p>
+        </div>
+        <div class="id">${id}</div>
       </div>
-      <div class="info">
-        <p>${first_name} ${last_name}</p>
-        <p>${email}</p>
-      </div>
-    </div>
-  `
+    `
+  })
 }
 
 // https://reqres.in
-const usersContainer = document.querySelector('#usersContainer')
 let users = {}
 fetch('https://reqres.in/api/users?page=1')
   .then(response => {
     if(response.ok){
-      // response.json().then(data => console.table(data.data))
-      response.json().then(data => {
-        usersContainer.innerHTML = ''
-        data.data.forEach(user => {
-          usersContainer.innerHTML += viewProfilUser(user)
-        })
-      })
+      response.json().then(data => listProfilsUsersInUsersContainer(data))
     } else {
       console.log('ERREUR !!!')
     }
