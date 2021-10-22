@@ -51,6 +51,7 @@ function deleteUser(userId) {
   .then(response => {
     if(response.ok){
       console.log('DELETE STATUS CODE ' + response.status)
+      document.getElementById(`id-${userId}`).style.display = 'none'
     } else {
       console.log('DELETE STATUS CODE ' + response.status)
     }
