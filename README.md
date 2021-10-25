@@ -20,7 +20,7 @@ Vous allez vous connecter à l'API qui est en ressource dans ce projet.
 
 ## Ressources
 
-- ✖ [Reqres - A hosted REST-API ready to respond to your AJAX requests](https://reqres.in)
+- ✔ [Reqres - A hosted REST-API ready to respond to your AJAX requests](https://reqres.in)
 - ✔ [La méthode Fetch JS pour aller chercher des données](https://www.youtube.com/watch?v=sGvEqHkDyFc)
-- ✖ [API Fetch - Référence Web API | MDN](https://developer.mozilla.org/fr/docs/Web/API/Fetch_API)
-- ✖ [Window.localStorage - Référence Web API | MDN](https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage)
+- ✔ [API Fetch - Référence Web API | MDN](https://developer.mozilla.org/fr/docs/Web/API/Fetch_API)
+- ✔ [Window.localStorage - Référence Web API | MDN](https://developer.mozilla.org/fr/docs/Web/API/Window/localStorage)
