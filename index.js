@@ -11,6 +11,18 @@ document.getElementById('cat').addEventListener('click', e => {
     })
 })
 
+document.getElementById('addUser').addEventListener('click', e => {
+  document.getElementById('formContainer').style = 'display: block'
+  document.getElementById('usersContainer').style = 'display: none'
+  document.getElementById('addUser').innerHTML = '<i class="fas fa-times"></i>'
+
+  document.getElementById('addUser').addEventListener('click', e => {
+    document.getElementById('formContainer').style = 'display: none'
+    document.getElementById('usersContainer').style = ''
+    document.getElementById('addUser').innerHTML = '<i class="fas fa-user-plus"></i>'
+  })
+})
+
 function listProfilsUsersInUsersContainer(data) {
   const usersContainer = document.querySelector('#usersContainer')
   usersContainer.innerHTML = ''
@@ -47,35 +59,51 @@ function deleteUser(userId) {
   })
 }
 
-// function createUser() {
-//   console.log(`https://reqres.in/api/users/${userId}`)
-//   fetch(`https://reqres.in/api/users/${userId}`, {
-//     method: 'POST'
-//   })
-//   .then(response => {
-//     if(response.ok){
-//       console.log('DELETE STATUS CODE ' + response.status)
-//       document.getElementById(`id-${userId}`).style.display = 'none'
-//     } else {
-//       console.log('DELETE STATUS CODE ' + response.status)
-//     }
-//   })
-// }
+const form = document.getElementById("addForm");
+form.addEventListener('submit', (e) => {
+  e.preventDefault()
 
-// function updateUser() {
-//   console.log(`https://reqres.in/api/users/${userId}`)
-//   fetch(`https://reqres.in/api/users/${userId}`, {
-//     method: 'PUT'
-//   })
-//   .then(response => {
-//     if(response.ok){
-//       console.log('DELETE STATUS CODE ' + response.status)
-//       document.getElementById(`id-${userId}`).style.display = 'none'
-//     } else {
-//       console.log('DELETE STATUS CODE ' + response.status)
-//     }
-//   })
-// }
+  /* Je rccupére les données du formulaire */
+  let submitForm = {}
+  Array.from(new FormData(form), (entry) => {
+    submitForm[entry[0]] = entry[1]
+  })
+
+  /* J'envoie les données à l'API et je récupére la réponse */
+  fetch(`https://reqres.in/api/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(submitForm)
+  })
+  .then(response => {
+    if(response.ok){
+      console.log('STATUS CODE ' + response.status)
+      response.json().then(data => console.log(data))
+    } else {
+      console.log('STATUS CODE ' + response.status)
+    }
+  })
+  /* Je vide et je ferme le formulaire */
+  form.first_name.value = ''
+  form.last_name.value = ''
+  form.email.value = ''
+  document.getElementById('formContainer').style = 'display: none'
+})
+
+function updateUser() {
+  console.log(`https://reqres.in/api/users/${userId}`)
+  fetch(`https://reqres.in/api/users/${userId}`, {
+    method: 'PUT'
+  })
+  .then(response => {
+    if(response.ok){
+      console.log('DELETE STATUS CODE ' + response.status)
+      document.getElementById(`id-${userId}`).style.display = 'none'
+    } else {
+      console.log('DELETE STATUS CODE ' + response.status)
+    }
+  })
+}
 
 function readAllUsers() {
   let users = {}
