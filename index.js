@@ -12,15 +12,16 @@ document.getElementById('cat').addEventListener('click', e => {
 })
 
 document.getElementById('addUser').addEventListener('click', e => {
-  document.getElementById('formContainer').style = 'display: block'
-  document.getElementById('usersContainer').style = 'display: none'
-  document.getElementById('addUser').innerHTML = '<i class="fas fa-times"></i>'
-
-  document.getElementById('addUser').addEventListener('click', e => {
+  if (document.getElementById('addUser').classList.contains('active')) {
     document.getElementById('formContainer').style = 'display: none'
     document.getElementById('usersContainer').style = ''
     document.getElementById('addUser').innerHTML = '<i class="fas fa-user-plus"></i>'
-  })
+  } else {
+    document.getElementById('formContainer').style = 'display: block'
+    document.getElementById('usersContainer').style = 'display: none'
+    document.getElementById('addUser').innerHTML = '<i class="fas fa-times"></i>'
+  }
+  document.getElementById('addUser').classList.toggle('active')
 })
 
 function listProfilsUsersInUsersContainer(data) {
@@ -88,6 +89,9 @@ form.addEventListener('submit', (e) => {
   form.last_name.value = ''
   form.email.value = ''
   document.getElementById('formContainer').style = 'display: none'
+  document.getElementById('usersContainer').style = ''
+  document.getElementById('addUser').innerHTML = '<i class="fas fa-user-plus"></i>'
+  document.getElementById('addUser').classList.toggle('active')
 })
 
 function updateUser() {
