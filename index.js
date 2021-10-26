@@ -64,7 +64,8 @@ const form = document.getElementById("addForm");
 form.addEventListener('submit', (e) => {
   e.preventDefault()
 
-  /* Je rccupére les données du formulaire */
+
+
   let submitForm = {}
   Array.from(new FormData(form), (entry) => {
     submitForm[entry[0]] = entry[1]
@@ -73,7 +74,8 @@ form.addEventListener('submit', (e) => {
   /* J'envoie les données à l'API et je récupére la réponse */
   fetch(`https://reqres.in/api/users`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    // headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'multipart/form-data' },
     body: JSON.stringify(submitForm)
   })
   .then(response => {
@@ -122,3 +124,18 @@ function readAllUsers() {
 }
 
 readAllUsers()
+
+  /* Je rccupére les données du formulaire */
+  const avatar = document.getElementById("avatar")
+  const imgPreview = document.getElementById("img-preview")
+  avatar.addEventListener("change", function () {
+    const files = avatar.files[0]
+    if (files) {
+      const fileReader = new FileReader()
+      fileReader.readAsDataURL(files)
+      fileReader.addEventListener("load", function () {
+        imgPreview.style.display = "block"
+        imgPreview.innerHTML = '<img src="' + this.result + '" />'
+      })
+    }
+  })

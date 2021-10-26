@@ -19,10 +19,17 @@
 
   <div id="formContainer">
     <form id="addForm" method="POST">
-      <input type="text" name="first_name" id="first_name" placeholder="Prénom" required>
-      <input type="text" name="last_name" id="last_name" placeholder="Nom" required>
-      <input type="email" name="email" id="email" placeholder="E-Mail" required>
-      <input type="submit" value="Enregistrer">
+      <div class="col">
+        <div id="img-preview"></div>
+        <input type="file" accept="image/*" name="avatar" id="avatar" required>
+        <label for="avatar">Choose File</label>
+      </div>
+      <div class="col">
+        <input type="text" name="first_name" id="first_name" placeholder="Prénom" required>
+        <input type="text" name="last_name" id="last_name" placeholder="Nom" required>
+        <input type="email" name="email" id="email" placeholder="E-Mail" required>
+        <input type="submit" value="Enregistrer">
+      </div>
     </form>
   </div>
 

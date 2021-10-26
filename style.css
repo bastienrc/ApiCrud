@@ -96,8 +96,51 @@ nav i {
 
 #addForm {
   display: flex;
-  flex-direction: column;
   width: 60%;
   margin: auto;
 }
 
+#addForm .col {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: auto;
+}
+
+#addForm input {
+  height: 2rem;
+  margin: 0.3rem 0;
+}
+
+#avatarImg {
+  width: 120px;
+}
+
+#addForm {
+  width: 600px;
+}
+
+#img-preview {
+  margin: 10px;
+}
+
+[type="file"] {
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+[type="file"] + label {
+  background: #006600;
+  padding: 10px;
+  text-align: center;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+[type="file"] + label:hover {
+  background-color: #090;
+}
