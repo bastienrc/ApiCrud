@@ -36,16 +36,30 @@ function listProfilsUsersInUsersContainer (data) {
   })
 }
 
+function readAllUsers () {
+  let users = {}
+  fetch('https://reqres.in/api/users?per_page=12')
+    .then(response => {
+      document.getElementById('response').innerHTML = `<pre>Status: ${response.status}</pre>`
+      if(response.ok){
+        response.json().then(data => {
+          listProfilsUsersInUsersContainer(data)
+          document.getElementById('response').innerHTML += `<pre>${JSON.stringify(data.data, null, 2)}</pre>`
+        })
+      }
+    })
+}
+
 function deleteUser (userId) {
   console.log(`https://reqres.in/api/users/${userId}`)
   fetch(`https://reqres.in/api/users/${userId}`, { method: 'DELETE' })
   .then(response => {
+    let del = ''
     if(response.ok){
-      console.log('DELETE STATUS CODE ' + response.status)
       document.getElementById(`id-${userId}`).style.display = 'none'
-    } else {
-      console.log('DELETE STATUS CODE ' + response.status)
+      del = `, User id-${userId} exterminate !`
     }
+    document.getElementById('response').insertAdjacentHTML('afterbegin', `<pre>Status: ${response.status}${del}</pre>`)
   })
 }
 
@@ -62,23 +76,6 @@ function updateUser () {
       console.log('DELETE STATUS CODE ' + response.status)
     }
   })
-}
-
-function readAllUsers () {
-  let users = {}
-  fetch('https://reqres.in/api/users?per_page=12')
-    .then(response => {
-      document.getElementById('response').innerHTML = `<pre>Status: ${response.status}</pre>`
-      if(response.ok){
-        response.json().then(data => {
-          listProfilsUsersInUsersContainer(data)
-          document.getElementById('response').innerHTML += `<pre>${JSON.stringify(data.data, null, 2)}</pre>`
-          console.log(data.data)
-      })
-      } else {
-        console.log('ERREUR !!!')
-      }
-    })
 }
 
 
