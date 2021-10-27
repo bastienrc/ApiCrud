@@ -5,6 +5,7 @@
   padding: 0;
 }
 
+
 /* *** Global ********************************************************** *** */
 body {
   background: #fff;
@@ -16,6 +17,14 @@ body {
 }
 
 img { width: 100%; height: 100% }
+
+#container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: auto;
+}
+
 
 /* *** Menu ************************************************************ *** */
 nav {
@@ -41,14 +50,8 @@ nav i {
   color: #ffffff33;
 }
 
-/* *** POST ************************************************************ *** */
-#usersContainer {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin: auto;
-}
 
+/* *** POST ************************************************************ *** */
 .userProfile {
   position: relative;
   display: flex;
@@ -95,9 +98,13 @@ nav i {
   padding: 5px;
 }
 
+
 /* *** Formulaire ****************************************************** *** */
-#formContainer {
-  display: none;
+#container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: auto;
 }
 
 #addForm {
@@ -151,6 +158,7 @@ nav i {
   background-color: #090;
 }
 
+
 /* *** Response ******************************************************** *** */
 #btnViewResponse {
   font-size: 0.75em;
@@ -163,11 +171,11 @@ nav i {
   cursor: pointer;
 }
 
-#response {
+#responseContainer {
   display: none;
   background-color: #00660033;
   color: rgb(60, 60, 60);
-  max-width: 90%;
+  width: 90%;
   max-width: 600px;
   margin: auto;
   padding: 15px 30px;
@@ -176,6 +184,6 @@ nav i {
   min-height: 300px;
 }
 
-#response pre {
+#responseContainer pre {
   margin: 10px 0;
 }

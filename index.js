@@ -51,10 +51,9 @@ function createUser () {
 
 // Read
 function listProfilsUsersInUsersContainer (data) {
-  const usersContainer = document.querySelector('#usersContainer')
-  usersContainer.innerHTML = ''
+  container.innerHTML = ''
   data.data.forEach(({email, first_name, last_name, avatar, id}) => {
-    usersContainer.innerHTML += `
+    container.innerHTML += `
       <div class="userProfile" id="id-${id}">
         <div class="id">${id}</div>
         <div class="avatar">
@@ -74,17 +73,15 @@ function listProfilsUsersInUsersContainer (data) {
 }
 
 function readAllUsers () {
-  document.getElementById('root').innerHTML += `
-    <div id="response"></div>
-    <div id="usersContainer"></div>
-  `
   fetch('https://reqres.in/api/users?per_page=12')
     .then(response => {
-      document.getElementById('response').innerHTML = `<pre>Status: ${response.status}</pre>`
+      document.getElementById('responseContainer')
+              .innerHTML = `<pre>Status: ${response.status}</pre>`
       if(response.ok){
         response.json().then(data => {
           listProfilsUsersInUsersContainer(data)
-          document.getElementById('response').innerHTML += `<pre>${JSON.stringify(data.data, null, 2)}</pre>`
+          document.getElementById('responseContainer')
+                  .innerHTML += `<pre>${JSON.stringify(data.data, null, 2)}</pre>`
         })
       }
     })
@@ -116,7 +113,8 @@ function deleteUser (userId) {
       document.getElementById(`id-${userId}`).style.display = 'none'
       del = `, User #${userId} exterminate !`
     }
-    document.getElementById('response').insertAdjacentHTML('afterbegin', `<pre>Status: ${response.status}${del}</pre>`)
+    document.getElementById('responseContainer')
+            .insertAdjacentHTML('afterbegin', `<pre>Status: ${response.status}${del}</pre>`)
   })
 }
 
@@ -126,12 +124,12 @@ function deleteUser (userId) {
 const btnViewResponse = document.getElementById('btnViewResponse')
 btnViewResponse.addEventListener('click', () => {
   if (btnViewResponse.classList.contains('active')) {
-    document.getElementById('response').style = 'display: none'
-    document.getElementById('usersContainer').style = 'display: flex'
+    responseContainer.style = 'display: none'
+    container.style = 'display: flex'
     btnViewResponse.innerHTML = 'Voir la response'
   } else {
-    document.getElementById('response').style = 'display: block'
-    document.getElementById('usersContainer').style = 'display: none'
+    responseContainer.style = 'display: block'
+    container.style = 'display: none'
     btnViewResponse.innerHTML = 'Fermer la response'
   }
   btnViewResponse.classList.toggle('active')
@@ -141,53 +139,61 @@ btnViewResponse.addEventListener('click', () => {
 const addUser = document.getElementById('addUser')
 addUser.addEventListener('click', () => {
   if (addUser.classList.contains('active')) {
-    // formTpl()
-    document.getElementById('formContainer').style = 'display: none'
-    document.getElementById('usersContainer').style = ''
+    readAllUsers()
     addUser.innerHTML = '<i class="fas fa-user-plus"></i>'
   } else {
-    document.getElementById('formContainer').style = 'display: block'
-    document.getElementById('usersContainer').style = 'display: none'
+    container.style = 'display: flex'
+    container.innerHTML = formTpl()
+    responseContainer.innerHTML = '<pre>Enregistrer un « User » pour avoir une « Response ».</pre>'
     addUser.innerHTML = '<i class="fas fa-times"></i>'
   }
   addUser.classList.toggle('active')
 })
 
-// Envoie du formulaire
-// const form = document.getElementById("addForm");
-// form.addEventListener('submit', (e) => {
-//   e.preventDefault()
+//Envoie du formulaire
+function sendForm() {
+  const form = document.getElementById("addForm");
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
 
-//   let submitForm = {}
-//   Array.from(new FormData(form), (entry) => {
-//     submitForm[entry[0]] = entry[1]
-//   })
+    let submitForm = {}
+    Array.from(new FormData(form), (entry) => {
+      submitForm[entry[0]] = entry[1]
+    })
 
-//   /* J'envoie les données à l'API et je récupére la réponse */
-//   fetch(`https://reqres.in/api/users`, {
-//     method: 'POST',
-//     // headers: { 'Content-Type': 'application/json' },
-//     headers: { 'Content-Type': 'multipart/form-data' },
-//     body: JSON.stringify(submitForm)
-//   })
-//   .then(response => {
-//     if(response.ok){
-//       console.log('STATUS CODE ' + response.status)
-//       response.json().then(data => console.log(data))
-//     } else {
-//       console.log('STATUS CODE ' + response.status)
-//     }
-//   })
-//   /* Je vide et je ferme le formulaire */
-//   form.first_name.value = ''
-//   form.last_name.value = ''
-//   form.email.value = ''
-//   document.getElementById('formContainer').style = 'display: none'
-//   document.getElementById('usersContainer').style = ''
-//   document.getElementById('addUser').innerHTML = '<i class="fas fa-user-plus"></i>'
-//   document.getElementById('addUser').classList.toggle('active')
-// })
+    /* J'envoie les données à l'API et je récupére la réponse */
+    fetch(`https://reqres.in/api/users`, {
+      method: 'POST',
+      // headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'multipart/form-data' },
+      body: JSON.stringify(submitForm)
+    })
+    .then(response => {
+      if(response.ok){
+        console.log('STATUS CODE ' + response.status)
+        response.json().then(data => console.log(data))
+      } else {
+        console.log('STATUS CODE ' + response.status)
+      }
+    })
+    /* Je vide et je ferme le formulaire */
+    form.first_name.value = ''
+    form.last_name.value = ''
+    form.email.value = ''
+    document.getElementById('formContainer').style = 'display: none'
+    document.getElementById('usersContainer').style = ''
+    document.getElementById('addUser').innerHTML = '<i class="fas fa-user-plus"></i>'
+    document.getElementById('addUser').classList.toggle('active')
+  })
+}
 
 
 // Init
+const root = document.getElementById('root')
+root.innerHTML = `
+  <div id="responseContainer"></div>
+  <div id="container"></div>
+`
+const container = document.getElementById('container')
+const responseContainer = document.getElementById('responseContainer')
 readAllUsers()
