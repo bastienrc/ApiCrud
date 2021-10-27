@@ -13,29 +13,29 @@ document.getElementById('cat').addEventListener('click', e => {
 
 
 // Functions
-// Create
+// Create/Update formulaire
 function formTpl() {
   return `
     <form id="addForm" method="POST">
       <div class="col">
-        <div id="img-preview"></div>
+        <div id="img-preview"><img src="avatar_default.jpg" /></div>
         <input type="file" accept="image/*" name="avatar" id="avatar" required>
-        <label for="avatar">Choose File</label>
+        <label for="avatar">Choisissez votre Avatar</label>
       </div>
       <div class="col">
         <input type="text" name="first_name" id="first_name" placeholder="Prénom" required>
         <input type="text" name="last_name" id="last_name" placeholder="Nom" required>
         <input type="email" name="email" id="email" placeholder="E-Mail" required>
-        <input type="submit" value="Enregistrer">
+        <input type="submit" onClick="sendForm()" value="Enregistrer">
       </div>
     </form>
   `
 }
 
-function createUser () {
-  /* Je récupére les données du formulaire */
+function avatarPreview () {
   const avatar = document.getElementById("avatar")
   const imgPreview = document.getElementById("img-preview")
+  const img = document.querySelector("#img-preview img")
   avatar.addEventListener("change", function () {
     const files = avatar.files[0]
     if (files) {
@@ -43,9 +43,52 @@ function createUser () {
       fileReader.readAsDataURL(files)
       fileReader.addEventListener("load", function () {
         imgPreview.style.display = "block"
-        imgPreview.innerHTML = '<img src="' + this.result + '" />'
+        img.src = this.result
       })
     }
+  })
+}
+
+// Create
+function sendForm() {
+  const form = document.getElementById("addForm");
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    let submitForm = {}
+    Array.from(new FormData(form), (entry) => {
+      if (entry[0] === 'avatar') {
+        submitForm[entry[0]] = entry[1].name
+      } else {
+        submitForm[entry[0]] = entry[1]
+      }
+    })
+
+    /* J'envoie les données à l'API et je récupére la réponse */
+    fetch(`https://reqres.in/api/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      // headers: { 'Content-Type': 'multipart/form-data' },
+      body: JSON.stringify(submitForm)
+    })
+    .then(response => {
+      document.getElementById('responseContainer')
+              .innerHTML = `<pre>Status: ${response.status}</pre>`
+      if(response.ok){
+        response.json().then(data => {
+          console.log(data)
+          document.getElementById('responseContainer')
+                  .innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`
+        })
+      }
+    })
+
+    /* Je vide et je ferme le formulaire */
+    form.first_name.value = ''
+    form.last_name.value = ''
+    form.email.value = ''
+    const msg = '<p>Demande engistrer, vous pouvez aller voir la « Response ».</p>'
+    container.insertAdjacentHTML('afterbegin', msg)
   })
 }
 
@@ -144,48 +187,12 @@ addUser.addEventListener('click', () => {
   } else {
     container.style = 'display: flex'
     container.innerHTML = formTpl()
+    avatarPreview()
     responseContainer.innerHTML = '<pre>Enregistrer un « User » pour avoir une « Response ».</pre>'
     addUser.innerHTML = '<i class="fas fa-times"></i>'
   }
   addUser.classList.toggle('active')
 })
-
-//Envoie du formulaire
-function sendForm() {
-  const form = document.getElementById("addForm");
-  form.addEventListener('submit', (e) => {
-    e.preventDefault()
-
-    let submitForm = {}
-    Array.from(new FormData(form), (entry) => {
-      submitForm[entry[0]] = entry[1]
-    })
-
-    /* J'envoie les données à l'API et je récupére la réponse */
-    fetch(`https://reqres.in/api/users`, {
-      method: 'POST',
-      // headers: { 'Content-Type': 'application/json' },
-      headers: { 'Content-Type': 'multipart/form-data' },
-      body: JSON.stringify(submitForm)
-    })
-    .then(response => {
-      if(response.ok){
-        console.log('STATUS CODE ' + response.status)
-        response.json().then(data => console.log(data))
-      } else {
-        console.log('STATUS CODE ' + response.status)
-      }
-    })
-    /* Je vide et je ferme le formulaire */
-    form.first_name.value = ''
-    form.last_name.value = ''
-    form.email.value = ''
-    document.getElementById('formContainer').style = 'display: none'
-    document.getElementById('usersContainer').style = ''
-    document.getElementById('addUser').innerHTML = '<i class="fas fa-user-plus"></i>'
-    document.getElementById('addUser').classList.toggle('active')
-  })
-}
 
 
 // Init
