@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-page="home">
   <nav>
     <div id="cat"><i class="fas fa-paw"></i></div>
     <h1>
@@ -18,28 +18,7 @@
     <div id="addUser"><i class="fas fa-user-plus"></i></div>
   </nav>
 
-  <p id="erreur"></p>
-
-  <div id="formContainer">
-    <form id="addForm" method="POST">
-      <div class="col">
-        <div id="img-preview"></div>
-        <input type="file" accept="image/*" name="avatar" id="avatar" required>
-        <label for="avatar">Choose File</label>
-      </div>
-      <div class="col">
-        <input type="text" name="first_name" id="first_name" placeholder="Prénom" required>
-        <input type="text" name="last_name" id="last_name" placeholder="Nom" required>
-        <input type="email" name="email" id="email" placeholder="E-Mail" required>
-        <input type="submit" value="Enregistrer">
-      </div>
-    </form>
-  </div>
-
-  <div id="usersContainer"></div>
-
-  <div id="response">
-  </div>
+  <div id="root"></div>
 
   <script src="index.js"></script>
 </body>

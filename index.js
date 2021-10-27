@@ -13,6 +13,43 @@ document.getElementById('cat').addEventListener('click', e => {
 
 
 // Functions
+// Create
+function formTpl() {
+  return `
+    <form id="addForm" method="POST">
+      <div class="col">
+        <div id="img-preview"></div>
+        <input type="file" accept="image/*" name="avatar" id="avatar" required>
+        <label for="avatar">Choose File</label>
+      </div>
+      <div class="col">
+        <input type="text" name="first_name" id="first_name" placeholder="Prénom" required>
+        <input type="text" name="last_name" id="last_name" placeholder="Nom" required>
+        <input type="email" name="email" id="email" placeholder="E-Mail" required>
+        <input type="submit" value="Enregistrer">
+      </div>
+    </form>
+  `
+}
+
+function createUser () {
+  /* Je récupére les données du formulaire */
+  const avatar = document.getElementById("avatar")
+  const imgPreview = document.getElementById("img-preview")
+  avatar.addEventListener("change", function () {
+    const files = avatar.files[0]
+    if (files) {
+      const fileReader = new FileReader()
+      fileReader.readAsDataURL(files)
+      fileReader.addEventListener("load", function () {
+        imgPreview.style.display = "block"
+        imgPreview.innerHTML = '<img src="' + this.result + '" />'
+      })
+    }
+  })
+}
+
+// Read
 function listProfilsUsersInUsersContainer (data) {
   const usersContainer = document.querySelector('#usersContainer')
   usersContainer.innerHTML = ''
@@ -37,7 +74,10 @@ function listProfilsUsersInUsersContainer (data) {
 }
 
 function readAllUsers () {
-  let users = {}
+  document.getElementById('root').innerHTML += `
+    <div id="response"></div>
+    <div id="usersContainer"></div>
+  `
   fetch('https://reqres.in/api/users?per_page=12')
     .then(response => {
       document.getElementById('response').innerHTML = `<pre>Status: ${response.status}</pre>`
@@ -50,19 +90,7 @@ function readAllUsers () {
     })
 }
 
-function deleteUser (userId) {
-  console.log(`https://reqres.in/api/users/${userId}`)
-  fetch(`https://reqres.in/api/users/${userId}`, { method: 'DELETE' })
-  .then(response => {
-    let del = ''
-    if(response.ok){
-      document.getElementById(`id-${userId}`).style.display = 'none'
-      del = `, User id-${userId} exterminate !`
-    }
-    document.getElementById('response').insertAdjacentHTML('afterbegin', `<pre>Status: ${response.status}${del}</pre>`)
-  })
-}
-
+// Update
 function updateUser () {
   console.log(`https://reqres.in/api/users/${userId}`)
   fetch(`https://reqres.in/api/users/${userId}`, {
@@ -75,6 +103,20 @@ function updateUser () {
     } else {
       console.log('DELETE STATUS CODE ' + response.status)
     }
+  })
+}
+
+// Delete
+function deleteUser (userId) {
+  console.log(`https://reqres.in/api/users/${userId}`)
+  fetch(`https://reqres.in/api/users/${userId}`, { method: 'DELETE' })
+  .then(response => {
+    let del = ''
+    if(response.ok){
+      document.getElementById(`id-${userId}`).style.display = 'none'
+      del = `, User #${userId} exterminate !`
+    }
+    document.getElementById('response').insertAdjacentHTML('afterbegin', `<pre>Status: ${response.status}${del}</pre>`)
   })
 }
 
@@ -99,6 +141,7 @@ btnViewResponse.addEventListener('click', () => {
 const addUser = document.getElementById('addUser')
 addUser.addEventListener('click', () => {
   if (addUser.classList.contains('active')) {
+    // formTpl()
     document.getElementById('formContainer').style = 'display: none'
     document.getElementById('usersContainer').style = ''
     addUser.innerHTML = '<i class="fas fa-user-plus"></i>'
@@ -111,55 +154,40 @@ addUser.addEventListener('click', () => {
 })
 
 // Envoie du formulaire
-const form = document.getElementById("addForm");
-form.addEventListener('submit', (e) => {
-  e.preventDefault()
+// const form = document.getElementById("addForm");
+// form.addEventListener('submit', (e) => {
+//   e.preventDefault()
 
-  let submitForm = {}
-  Array.from(new FormData(form), (entry) => {
-    submitForm[entry[0]] = entry[1]
-  })
+//   let submitForm = {}
+//   Array.from(new FormData(form), (entry) => {
+//     submitForm[entry[0]] = entry[1]
+//   })
 
-  /* J'envoie les données à l'API et je récupére la réponse */
-  fetch(`https://reqres.in/api/users`, {
-    method: 'POST',
-    // headers: { 'Content-Type': 'application/json' },
-    headers: { 'Content-Type': 'multipart/form-data' },
-    body: JSON.stringify(submitForm)
-  })
-  .then(response => {
-    if(response.ok){
-      console.log('STATUS CODE ' + response.status)
-      response.json().then(data => console.log(data))
-    } else {
-      console.log('STATUS CODE ' + response.status)
-    }
-  })
-  /* Je vide et je ferme le formulaire */
-  form.first_name.value = ''
-  form.last_name.value = ''
-  form.email.value = ''
-  document.getElementById('formContainer').style = 'display: none'
-  document.getElementById('usersContainer').style = ''
-  document.getElementById('addUser').innerHTML = '<i class="fas fa-user-plus"></i>'
-  document.getElementById('addUser').classList.toggle('active')
-})
+//   /* J'envoie les données à l'API et je récupére la réponse */
+//   fetch(`https://reqres.in/api/users`, {
+//     method: 'POST',
+//     // headers: { 'Content-Type': 'application/json' },
+//     headers: { 'Content-Type': 'multipart/form-data' },
+//     body: JSON.stringify(submitForm)
+//   })
+//   .then(response => {
+//     if(response.ok){
+//       console.log('STATUS CODE ' + response.status)
+//       response.json().then(data => console.log(data))
+//     } else {
+//       console.log('STATUS CODE ' + response.status)
+//     }
+//   })
+//   /* Je vide et je ferme le formulaire */
+//   form.first_name.value = ''
+//   form.last_name.value = ''
+//   form.email.value = ''
+//   document.getElementById('formContainer').style = 'display: none'
+//   document.getElementById('usersContainer').style = ''
+//   document.getElementById('addUser').innerHTML = '<i class="fas fa-user-plus"></i>'
+//   document.getElementById('addUser').classList.toggle('active')
+// })
 
 
 // Init
 readAllUsers()
-
-/* Je récupére les données du formulaire */
-const avatar = document.getElementById("avatar")
-const imgPreview = document.getElementById("img-preview")
-avatar.addEventListener("change", function () {
-  const files = avatar.files[0]
-  if (files) {
-    const fileReader = new FileReader()
-    fileReader.readAsDataURL(files)
-    fileReader.addEventListener("load", function () {
-      imgPreview.style.display = "block"
-      imgPreview.innerHTML = '<img src="' + this.result + '" />'
-    })
-  }
-})
