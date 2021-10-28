@@ -14,19 +14,37 @@ document.getElementById('cat').addEventListener('click', e => {
 
 // Functions
 // Create/Update formulaire
-function formTpl() {
+function formTpl(user = '') {
+  let useMethod = 'POST'
+  let avatarImg = 'avatar_default.jpg'
+  let avatar = ``
+  let first_name = ``
+  let last_name = ``
+  let email = ``
+
+  if (user != '') {
+    useMethod = 'PUT'
+    avatarImg = user.avatar
+    avatar = `value="${user.avatar}"`
+    first_name = `value="${user.first_name}"`
+    last_name = `value="${user.last_name}"`
+    email = `value="${user.email}"`
+  }
+
   return `
     <form id="addForm" method="POST">
-      <div class="col">
-        <div id="img-preview"><img src="avatar_default.jpg" /></div>
-        <input type="file" accept="image/*" name="avatar" id="avatar" required>
+      <div class="col-6">
+        <div id="img-preview"><img src="${avatarImg}" /></div>
         <label for="avatar">Choisissez votre Avatar</label>
+        <input type="file" accept="image/*" name="avatar" id="avatar" ${avatar}" required>
       </div>
-      <div class="col">
-        <input type="text" name="first_name" id="first_name" placeholder="Prénom" required>
-        <input type="text" name="last_name" id="last_name" placeholder="Nom" required>
-        <input type="email" name="email" id="email" placeholder="E-Mail" required>
-        <input type="submit" onClick="sendForm()" value="Enregistrer">
+      <div class="col-6">
+        <input type="text" name="first_name" id="first_name" placeholder="Prénom" ${first_name} required>
+        <input type="text" name="last_name" id="last_name" placeholder="Nom" ${last_name} required>
+        <input type="email" name="email" id="email" placeholder="E-Mail" ${email} required>
+      </div>
+      <div class="col-12">
+        <input type="submit" onClick="sendForm('${useMethod}')" value="Enregistrer">
       </div>
     </form>
   `
@@ -50,7 +68,7 @@ function avatarPreview () {
 }
 
 // Create
-function sendForm() {
+function sendForm(useMethod) {
   const form = document.getElementById("addForm");
   form.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -66,7 +84,7 @@ function sendForm() {
 
     /* J'envoie les données à l'API et je récupére la réponse */
     fetch(`https://reqres.in/api/users`, {
-      method: 'POST',
+      method: useMethod,
       headers: { 'Content-Type': 'application/json' },
       // headers: { 'Content-Type': 'multipart/form-data' },
       body: JSON.stringify(submitForm)
@@ -87,8 +105,8 @@ function sendForm() {
     form.first_name.value = ''
     form.last_name.value = ''
     form.email.value = ''
-    const msg = '<p>Demande engistrer, vous pouvez aller voir la « Response ».</p>'
-    container.insertAdjacentHTML('afterbegin', msg)
+    const msg = '<p class="col-12">Demande enregistrer, vous pouvez aller voir la « Response ».</p>'
+    form.insertAdjacentHTML('afterbegin', msg)
   })
 }
 
@@ -103,11 +121,14 @@ function listProfilsUsersInUsersContainer (data) {
           <img src="${avatar}" alt="avatar de l'utilisateur ${first_name} ${last_name}" />
         </div>
         <div class="info">
-          <p>${first_name} ${last_name}</p>
-          <p>${email}</p>
+          <p>
+            <span class="firstName">${first_name}</span>
+            <span class="lastName">${last_name}</span>
+          </p>
+          <p class="email">${email}</p>
         </div>
         <div class="menu">
-          <span title="Modifier"><i class="fas fa-user-edit"></i></span>
+          <span title="Modifier" onClick="updateUser(${id})"><i class="fas fa-user-edit"></i></span>
           <span title="Supprimer" onClick="deleteUser(${id})"><i class="fas fa-user-minus"></i></span>
         </div>
       </div>
@@ -130,25 +151,41 @@ function readAllUsers () {
     })
 }
 
+
 // Update
-function updateUser () {
-  console.log(`https://reqres.in/api/users/${userId}`)
-  fetch(`https://reqres.in/api/users/${userId}`, {
-    method: 'PUT'
-  })
-  .then(response => {
-    if(response.ok){
-      console.log('DELETE STATUS CODE ' + response.status)
-      document.getElementById(`id-${userId}`).style.display = 'none'
-    } else {
-      console.log('DELETE STATUS CODE ' + response.status)
-    }
-  })
+function updateUser (userId) {
+  const user = {
+    "id": userId,
+    "email": document.querySelector(`#id-${userId} .email`).innerText,
+    "first_name": document.querySelector(`#id-${userId} .firstName`).innerText,
+    "last_name": document.querySelector(`#id-${userId} .lastName`).innerText,
+    "avatar": document.querySelector(`#id-${userId} .avatar img`).src
+  }
+
+  container.style = 'display: flex'
+  container.innerHTML = formTpl(user)
+  avatarPreview()
+  responseContainer.innerHTML = '<pre>Enregistrer un « User » pour avoir une « Response ».</pre>'
+  addUser.innerHTML = '<i class="fas fa-times"></i>'
+  addUser.classList.toggle('active')
+
+
+  // console.log(`https://reqres.in/api/users/${userId}`)
+  // fetch(`https://reqres.in/api/users/${userId}`, {
+  //   method: 'PUT'
+  // })
+  // .then(response => {
+  //   document.getElementById('responseContainer')
+  //           .innerHTML = `<pre>Status: ${response.status}</pre>`
+  //   if(response.ok){
+  //     console.log(response.data)
+  //   }
+  // })
 }
 
 // Delete
 function deleteUser (userId) {
-  console.log(`https://reqres.in/api/users/${userId}`)
+  // console.log(`https://reqres.in/api/users/${userId}`)
   fetch(`https://reqres.in/api/users/${userId}`, { method: 'DELETE' })
   .then(response => {
     let del = ''

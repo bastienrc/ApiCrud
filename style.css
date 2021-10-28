@@ -57,7 +57,7 @@ nav i {
   display: flex;
   align-items: center;
   margin: 10px;
-  background: #00660080;
+  background: #006600cc;
   color: white;
   width: 400px;
   height: 120px;
@@ -109,16 +109,19 @@ nav i {
 
 #addForm {
   display: flex;
+  flex-wrap: wrap;
   width: 60%;
   margin: auto;
 }
 
-#addForm .col {
+#addForm .col-6, .col-12 {
   display: flex;
   flex-direction: column;
-  width: 50%;
   margin: auto;
 }
+
+#addForm .col-6 { width: 50% }
+#addForm .col-12 { width: 100% }
 
 #addForm input {
   height: 2rem;
@@ -134,7 +137,8 @@ nav i {
 }
 
 #img-preview {
-  margin: 10px;
+  margin: 10px auto;
+  width: 120px;
 }
 
 [type="file"] {
@@ -143,9 +147,12 @@ nav i {
   overflow: hidden;
 }
 
-[type="file"] + label {
+#addForm label {
   background: #006600;
+  font-size: 0.9rem;
   padding: 10px;
+  width: 80%;
+  margin: auto;
   text-align: center;
   border: none;
   border-radius: 10px;
@@ -154,8 +161,26 @@ nav i {
   transition: all 0.2s;
 }
 
-[type="file"] + label:hover {
+#addForm label:hover {
   background-color: #090;
+}
+
+#addForm input[type="submit"] {
+  background: #005500;
+  font-size: 1rem;
+  line-height: 3rem;
+  height: 3rem;
+  text-align: center;
+  margin: 1rem 0;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#addForm input[type="submit"]:hover {
+  background: #008800;
 }
 
 
@@ -173,8 +198,8 @@ nav i {
 
 #responseContainer {
   display: none;
-  background-color: #00660033;
-  color: rgb(60, 60, 60);
+  background-color: #006600cc;
+  color: #eee;
   width: 90%;
   max-width: 600px;
   margin: auto;
