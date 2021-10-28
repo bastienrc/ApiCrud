@@ -16,6 +16,7 @@ document.getElementById('cat').addEventListener('click', e => {
 // Create/Update formulaire
 function formTpl(user = '') {
   let useMethod = 'POST'
+  let id = ``
   let avatarImg = 'avatar_default.jpg'
   let avatar = ``
   let first_name = ``
@@ -24,6 +25,7 @@ function formTpl(user = '') {
 
   if (user != '') {
     useMethod = 'PUT'
+    id = `<input type="hidden" id="userId" name="userId" value="${user.id}">`
     avatarImg = user.avatar
     avatar = `value="${user.avatar}"`
     first_name = `value="${user.first_name}"`
@@ -33,12 +35,14 @@ function formTpl(user = '') {
 
   return `
     <form id="addForm" method="POST">
+      <p class="col-12" id="msg"></p>
       <div class="col-6">
         <div id="img-preview"><img src="${avatarImg}" /></div>
         <label for="avatar">Choisissez votre Avatar</label>
-        <input type="file" accept="image/*" name="avatar" id="avatar" ${avatar}" required>
+        <input type="file" accept="image/*" name="avatar" id="avatar" ${avatar}">
       </div>
       <div class="col-6">
+        ${id}
         <input type="text" name="first_name" id="first_name" placeholder="Prénom" ${first_name} required>
         <input type="text" name="last_name" id="last_name" placeholder="Nom" ${last_name} required>
         <input type="email" name="email" id="email" placeholder="E-Mail" ${email} required>
@@ -82,17 +86,23 @@ function sendForm(useMethod) {
       }
     })
 
+    // console.log(submitForm)
+
     /* J'envoie les données à l'API et je récupére la réponse */
-    fetch(`https://reqres.in/api/users`, {
+    let url = `https://reqres.in/api/users/`
+    url += useMethod === 'PUT' ? submitForm['userId'] : null
+    // console.log(url)
+    fetch(url, {
       method: useMethod,
-      headers: { 'Content-Type': 'application/json' },
-      // headers: { 'Content-Type': 'multipart/form-data' },
+      // headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'multipart/form-data' },
       body: JSON.stringify(submitForm)
     })
     .then(response => {
       document.getElementById('responseContainer')
               .innerHTML = `<pre>Status: ${response.status}</pre>`
       if(response.ok){
+        console.log(response)
         response.json().then(data => {
           console.log(data)
           document.getElementById('responseContainer')
@@ -105,8 +115,7 @@ function sendForm(useMethod) {
     form.first_name.value = ''
     form.last_name.value = ''
     form.email.value = ''
-    const msg = '<p class="col-12">Demande enregistrer, vous pouvez aller voir la « Response ».</p>'
-    form.insertAdjacentHTML('afterbegin', msg)
+    document.getElementById('msg').innerText = 'Demande enregistrer, vous pouvez aller voir la « Response ».'
   })
 }
 
@@ -168,19 +177,6 @@ function updateUser (userId) {
   responseContainer.innerHTML = '<pre>Enregistrer un « User » pour avoir une « Response ».</pre>'
   addUser.innerHTML = '<i class="fas fa-times"></i>'
   addUser.classList.toggle('active')
-
-
-  // console.log(`https://reqres.in/api/users/${userId}`)
-  // fetch(`https://reqres.in/api/users/${userId}`, {
-  //   method: 'PUT'
-  // })
-  // .then(response => {
-  //   document.getElementById('responseContainer')
-  //           .innerHTML = `<pre>Status: ${response.status}</pre>`
-  //   if(response.ok){
-  //     console.log(response.data)
-  //   }
-  // })
 }
 
 // Delete
