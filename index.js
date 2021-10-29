@@ -94,8 +94,8 @@ function sendForm(useMethod) {
     // console.log(url)
     fetch(url, {
       method: useMethod,
-      // headers: { 'Content-Type': 'application/json' },
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: { 'Content-Type': 'application/json' },
+      // headers: { 'Content-Type': 'multipart/form-data' },
       body: JSON.stringify(submitForm)
     })
     .then(response => {
