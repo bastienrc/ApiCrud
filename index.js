@@ -73,7 +73,7 @@ function avatarPreview () {
 
 // Create
 function sendForm(useMethod) {
-  const form = document.getElementById("addForm");
+  const form = document.getElementById("addForm")
   form.addEventListener('submit', (e) => {
     e.preventDefault()
 
@@ -160,7 +160,6 @@ function readAllUsers () {
     })
 }
 
-
 // Update
 function updateUser (userId) {
   const user = {
@@ -194,6 +193,58 @@ function deleteUser (userId) {
   })
 }
 
+// login
+function loginForm () {
+  return `
+    <div id="login">
+      <form id="loginForm" method="POST">
+        <div id="infoLogin"></div>
+        <input type="email" name="email" id="email" placeholder="email" required />
+        <input type="password" name="password" id="password" placeholder="password" required />
+        <input type="submit" value="Se connecter" />
+      </form>
+    </div>
+  `
+}
+
+// Se connecter
+function sendLoginForm () {
+  const loginForm = document.getElementById("loginForm")
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault()
+
+    // console.log(loginForm)
+
+    let submitLoginForm = {}
+    Array.from(new FormData(loginForm), entry => submitLoginForm[entry[0]] = entry[1])
+    // Array.from(new FormData(loginForm), entry => console.log(entry))
+
+    // console.log(submitLoginForm)
+
+    /* J'envoie les données à l'API et je récupére la réponse */
+    fetch(`https://reqres.in/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(submitLoginForm)
+    })
+    .then(response => {
+      document.getElementById('responseContainer')
+              .innerHTML = `<pre>Status: ${response.status}</pre>`
+      const infoStatus = response.status === 200 ? 'Email Valide' : 'Email inconnu'
+      document.getElementById('infoLogin')
+              .innerHTML += `<p>${infoStatus}</p>`
+      if(response.ok){
+        // console.log(response)
+        response.json().then(data => {
+          // console.log(data)
+          localStorage.setItem('token', data.token)
+          document.getElementById('responseContainer')
+                  .innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`
+        })
+      }
+    })
+  })
+}
 
 // Event
 // Bouton view response (en sous-titre)
@@ -225,6 +276,23 @@ addUser.addEventListener('click', () => {
     addUser.innerHTML = '<i class="fas fa-times"></i>'
   }
   addUser.classList.toggle('active')
+})
+
+// Bouton login
+const btnLogin = document.getElementById('btnLogin')
+btnLogin.addEventListener('click', () => {
+  if (btnLogin.classList.contains('active')) {
+    btnLogin.innerHTML = `<p>Connexion</p>`
+    readAllUsers()
+    addUser.innerHTML = '<i class="fas fa-user-plus"></i>'
+  } else {
+    container.style = 'display: flex'
+    container.innerHTML = loginForm()
+    sendLoginForm()
+    responseContainer.innerHTML = '<pre>Connectez-vous pour avoir une « Response ».</pre>'
+    btnLogin.innerHTML = `<p>Annuler connexion</p>`
+  }
+  btnLogin.classList.toggle('active')
 })
 
 

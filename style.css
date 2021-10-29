@@ -31,7 +31,7 @@ nav {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 2rem;
+  margin: 0;
 }
 
 nav h1 {
@@ -211,4 +211,74 @@ nav i {
 
 #responseContainer pre {
   margin: 10px 0;
+}
+
+
+/* *** Login *********************************************************** *** */
+#login form {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 50px auto 0 auto;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+#login form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin-top: 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+#login form input[type="submit"] {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+
+#login form input[type="submit"]:hover,
+#login form input[type="submit"]:active,
+#login form input[type="submit"]:focus {
+  background: #43A047;
+}
+
+#btnLogin {
+  display: block;
+  position: sticky;
+  top: 0;
+  background: #006600;
+  width: 500px;
+  margin: 0 calc((100% - 500px) / 2);
+  clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%);
+}
+
+#btnLogin:hover, #btnLogin:hover p {
+  background: #43A047;
+  cursor: pointer;
+}
+
+#btnLogin p {
+  color: #FFFFFF;
+  padding: 0.5rem 3rem;
+  text-align: center;
 }

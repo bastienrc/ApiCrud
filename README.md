@@ -7,14 +7,14 @@ Vous allez vous connecter à l'API qui est en ressource dans ce projet.
 
   - ✔ j'attends une page avec la liste des utilisateurs (GET), **{id, first_name, last_name, avatar}**
   - ✔ une page pour créer un utilisateur et l'ajouter dans l'API (POST)
-  - une page avec la possibilité de mettre à jour les données d'un utilisateur (PUT)
+  - ✔ une page avec la possibilité de mettre à jour les données d'un utilisateur (PUT)
   - ✔ une page pour supprimer un utilisateur (DELETE)
-  - une page de connexion qui va recevoir un Token que vous stockerez dans un localStorage
+  - ✔ une page de connexion qui va recevoir un Token que vous stockerez dans un localStorage
 
 ​Pour chaque page, vous devez afficher la réponse de l'API sur la page concernée !
 
-  - status de la réponse
-  - et l'objet JSON envoyé par le serveur
+  - ✔ status de la réponse
+  - ✔ et l'objet JSON envoyé par le serveur
 
 ​Les appels API se feront via l'API FETCH.
 
